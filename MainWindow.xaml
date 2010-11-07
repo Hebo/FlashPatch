@@ -13,7 +13,7 @@
         <Button Content="Apply Patch" Height="23" Name="apply" Margin="65,184,8,0" VerticalAlignment="Top" Click="apply_Click" />
         <Separator Height="24" Margin="65,154,0,0" Name="separator1" VerticalAlignment="Top" HorizontalAlignment="Left" Width="194" Grid.ColumnSpan="2" />
         <TextBlock Margin="98,71,0,0" FontSize="18" TextAlignment="Center" HorizontalAlignment="Left" Width="129" Height="35" VerticalAlignment="Top" Grid.ColumnSpan="2">
-                <Hyperlink NavigateUri="http://github.com/cev" RequestNavigate="Hyperlink_RequestNavigate">
+                <Hyperlink NavigateUri="https://github.com/Cev/FlashPatch/wiki/Usage" RequestNavigate="Hyperlink_RequestNavigate">
                     Instructions
                 </Hyperlink></TextBlock>
     </Grid>
