@@ -62,7 +62,7 @@ namespace FlashPatch
                 catch (Exception ex)
                 {
                     string messageBoxText = ex.Message;
-                    string caption = "Patch Success";
+                    string caption = "Patch Error";
                     MessageBoxButton button = MessageBoxButton.OK;
                     MessageBoxImage icon = MessageBoxImage.Error;
                     MessageBox.Show(messageBoxText, caption, button, icon);
