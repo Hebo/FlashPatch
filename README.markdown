@@ -7,4 +7,4 @@ Adobe Flash has issues with fullscreen video on multiple monitors. Specifically,
 
 Usage
 ------
-See the [[wiki|https://github.com/Cev/FlashPatch/wiki/Usage]]
+See the [wiki](https://github.com/Cev/FlashPatch/wiki/Usage)
