@@ -5,11 +5,12 @@ namespace FlashPatch
 {
     class Patch
     {
+        // Byte patterns
+        private static readonly Byte[] searchPattern = { 0x74, 0x39, 0x83, 0xe8 };
+        private static readonly Byte[] replacementBytes = { 0x90, 0x90 };
+
         internal static bool apply(string filename)
         {
-            Byte[] searchBytes = new Byte[] { 0x74, 0x39, 0x83, 0xe8 };
-            Byte[] replacementBytes = new Byte[] { 0x90, 0x90 };
-
             var bytes = File.ReadAllBytes(filename);
             var location = -1;
 
@@ -18,10 +19,10 @@ namespace FlashPatch
             bool found = false;
             for (int i = 0; i < bytes.Length; i++)
             {
-                for (int j = 0; j < searchBytes.Length; j++)
+                for (int j = 0; j < searchPattern.Length; j++)
                 {
                     found = true;
-                    if (bytes[i + j] != searchBytes[j])
+                    if (bytes[i + j] != searchPattern[j])
                     {
                         found = false;
                         break;
@@ -65,10 +66,10 @@ namespace FlashPatch
             }
         }
 
-        private static void writeBytes(int location, byte[] buff, string fileName)
+        private static void writeBytes(int index, byte[] buff, string fileName)
         {
             var fs = new FileStream(fileName, FileMode.Open, FileAccess.ReadWrite);
-            fs.Position = location;
+            fs.Position = index;
 
             foreach (var b in buff)
             {
@@ -77,9 +78,5 @@ namespace FlashPatch
            
             fs.Close();
         }
-
-
-
-
     }
 }

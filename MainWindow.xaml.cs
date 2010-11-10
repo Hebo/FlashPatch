@@ -1,18 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using Microsoft.Win32;
 using System.Diagnostics;
+using System.IO;
+using System.Windows;
+using System.Windows.Navigation;
+using Microsoft.Win32;
 
 namespace FlashPatch
 {
@@ -41,8 +32,16 @@ namespace FlashPatch
                 //update ui
                 filename.Content = safeFilePath;
                 BtnApply.IsEnabled = true;
-                BtnRestore.IsEnabled = true;
 
+                // Show restore button if backup file exists
+                if (File.Exists(filePath + "_backup"))
+                {
+                    BtnRestore.IsEnabled = true;
+                }
+                else
+                {
+                    BtnRestore.IsEnabled = false;
+                }       
             }
         }
 
@@ -54,29 +53,20 @@ namespace FlashPatch
 				patchResponse = Patch.apply(filePath);
 				if (!patchResponse)
 				{
-					string messageBoxText = "Error patching file: Could not find location to patch";
-					string caption = "Patch Failed";
-					MessageBoxButton button = MessageBoxButton.OK;
-					MessageBoxImage icon = MessageBoxImage.Error;
-					MessageBox.Show(messageBoxText, caption, button, icon);
+					string messageBoxText = "Error patching file: Could not find location to patch. You may have selected the wrong file or the version of Flash is unsupported.";
+                    MessageBox.Show(messageBoxText, "Patch Failed", MessageBoxButton.OK, MessageBoxImage.Error);
 				}
 			}
 			catch (Exception ex)
 			{
-				string messageBoxText = ex.Message;
-				string caption = "Patch Error";
-				MessageBoxButton button = MessageBoxButton.OK;
-				MessageBoxImage icon = MessageBoxImage.Error;
-				MessageBox.Show(messageBoxText, caption, button, icon);
+				string messageBoxText = ex.Message;;
+                MessageBox.Show(messageBoxText, "Patch Error", MessageBoxButton.OK, MessageBoxImage.Error);
 			}
 
 			if (patchResponse)
 			{
 				string messageBoxText = "Patch sucessfully applied! Restart your browser for the changes to take effect.";
-				string caption = "Patch Success";
-				MessageBoxButton button = MessageBoxButton.OK;
-				MessageBoxImage icon = MessageBoxImage.Exclamation;
-				MessageBox.Show(messageBoxText, caption, button, icon);
+                MessageBox.Show(messageBoxText, "Patch Success", MessageBoxButton.OK, MessageBoxImage.Exclamation);
 			}
         }
 
@@ -95,28 +85,19 @@ namespace FlashPatch
                 if (!restoreResponse)
                 {
                     string messageBoxText = "Error restoring file: Could not find backup";
-                    string caption = "Patch Failed";
-                    MessageBoxButton button = MessageBoxButton.OK;
-                    MessageBoxImage icon = MessageBoxImage.Error;
-                    MessageBox.Show(messageBoxText, caption, button, icon);
+                    MessageBox.Show(messageBoxText, "Patch Failed", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
             catch (Exception ex)
             {
                 string messageBoxText = ex.Message;
-                string caption = "Restore Error";
-                MessageBoxButton button = MessageBoxButton.OK;
-                MessageBoxImage icon = MessageBoxImage.Error;
-                MessageBox.Show(messageBoxText, caption, button, icon);
+                MessageBox.Show(messageBoxText, "Restore Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
 
             if (restoreResponse)
             {
                 string messageBoxText = "Backup file sucessfully restored! Restart your browser for the changes to take effect.";
-                string caption = "Restore Success";
-                MessageBoxButton button = MessageBoxButton.OK;
-                MessageBoxImage icon = MessageBoxImage.Exclamation;
-                MessageBox.Show(messageBoxText, caption, button, icon);
+                MessageBox.Show(messageBoxText, "Restore Success", MessageBoxButton.OK, MessageBoxImage.Exclamation);
             }
         }
     }
