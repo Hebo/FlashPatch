@@ -5,11 +5,10 @@ namespace FlashPatch
 {
     class Patch
     {
-        public static bool apply(string filename)
+        internal static bool apply(string filename)
         {
-
-            var searchString = new Byte[] {0x74, 0x39, 0x83, 0xe8};
-            var buff = new Byte[] { 0x90, 0x90 };
+            Byte[] searchBytes = new Byte[] { 0x74, 0x39, 0x83, 0xe8 };
+            Byte[] replacementBytes = new Byte[] { 0x90, 0x90 };
 
             var bytes = File.ReadAllBytes(filename);
             var location = -1;
@@ -19,10 +18,10 @@ namespace FlashPatch
             bool found = false;
             for (int i = 0; i < bytes.Length; i++)
             {
-                for (int j = 0; j < searchString.Length; j++)
+                for (int j = 0; j < searchBytes.Length; j++)
                 {
                     found = true;
-                    if (bytes[i + j] != searchString[j])
+                    if (bytes[i + j] != searchBytes[j])
                     {
                         found = false;
                         break;
@@ -45,9 +44,25 @@ namespace FlashPatch
             File.Delete(backupFilename);
             File.Copy(filename, backupFilename);
 
-            writeBytes(location, buff, filename);
+            writeBytes(location, replacementBytes, filename);
 
             return true;
+        }
+
+        internal static bool restore(string filename)
+        {
+            string backupFilename = filename + "_backup";
+
+            if (File.Exists(filename))
+            {
+                File.Delete(filename);
+                File.Copy(backupFilename, filename);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         private static void writeBytes(int location, byte[] buff, string fileName)
@@ -62,6 +77,8 @@ namespace FlashPatch
            
             fs.Close();
         }
+
+
 
 
     }

@@ -38,61 +38,86 @@ namespace FlashPatch
                 filePath = ofd.FileName;
                 safeFilePath = ofd.SafeFileName;
 
+                //update ui
                 filename.Content = safeFilePath;
+                BtnApply.IsEnabled = true;
+                BtnRestore.IsEnabled = true;
+
             }
         }
 
         private void apply_Click(object sender, RoutedEventArgs e)
         {
-            if (filePath != null)
-            {
-                bool patchResponse = false;
-                try
-                {
-                    patchResponse = Patch.apply(filePath);
-                    if (!patchResponse)
-                    {
-                        string messageBoxText = "Error patching file: Could not find location to patch";
-                        string caption = "Patch Failed";
-                        MessageBoxButton button = MessageBoxButton.OK;
-                        MessageBoxImage icon = MessageBoxImage.Error;
-                        MessageBox.Show(messageBoxText, caption, button, icon);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    string messageBoxText = ex.Message;
-                    string caption = "Patch Error";
-                    MessageBoxButton button = MessageBoxButton.OK;
-                    MessageBoxImage icon = MessageBoxImage.Error;
-                    MessageBox.Show(messageBoxText, caption, button, icon);
-                }
+			bool patchResponse = false;
+			try
+			{
+				patchResponse = Patch.apply(filePath);
+				if (!patchResponse)
+				{
+					string messageBoxText = "Error patching file: Could not find location to patch";
+					string caption = "Patch Failed";
+					MessageBoxButton button = MessageBoxButton.OK;
+					MessageBoxImage icon = MessageBoxImage.Error;
+					MessageBox.Show(messageBoxText, caption, button, icon);
+				}
+			}
+			catch (Exception ex)
+			{
+				string messageBoxText = ex.Message;
+				string caption = "Patch Error";
+				MessageBoxButton button = MessageBoxButton.OK;
+				MessageBoxImage icon = MessageBoxImage.Error;
+				MessageBox.Show(messageBoxText, caption, button, icon);
+			}
 
-                if (patchResponse)
-                {
-                    string messageBoxText = "Patch sucessfully applied! Restart your browser for the changes to take effect.";
-                    string caption = "Patch Success";
-                    MessageBoxButton button = MessageBoxButton.OK;
-                    MessageBoxImage icon = MessageBoxImage.Exclamation;
-                    MessageBox.Show(messageBoxText, caption, button, icon);
-                }
-            }
-            else
-            {
-                string messageBoxText = "Error: No file selected";
-                string caption = "Error";
-                MessageBoxButton button = MessageBoxButton.OK;
-                MessageBoxImage icon = MessageBoxImage.Error;
-                MessageBox.Show(messageBoxText, caption, button, icon);
-            }
-
-
+			if (patchResponse)
+			{
+				string messageBoxText = "Patch sucessfully applied! Restart your browser for the changes to take effect.";
+				string caption = "Patch Success";
+				MessageBoxButton button = MessageBoxButton.OK;
+				MessageBoxImage icon = MessageBoxImage.Exclamation;
+				MessageBox.Show(messageBoxText, caption, button, icon);
+			}
         }
 
         private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
         {
             Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri));
             e.Handled = true;
+        }
+
+        private void Restore_Click(object sender, RoutedEventArgs e)
+        {
+            bool restoreResponse = false;
+            try
+            {
+                restoreResponse = Patch.restore(filePath);
+                if (!restoreResponse)
+                {
+                    string messageBoxText = "Error restoring file: Could not find backup";
+                    string caption = "Patch Failed";
+                    MessageBoxButton button = MessageBoxButton.OK;
+                    MessageBoxImage icon = MessageBoxImage.Error;
+                    MessageBox.Show(messageBoxText, caption, button, icon);
+                }
+            }
+            catch (Exception ex)
+            {
+                string messageBoxText = ex.Message;
+                string caption = "Restore Error";
+                MessageBoxButton button = MessageBoxButton.OK;
+                MessageBoxImage icon = MessageBoxImage.Error;
+                MessageBox.Show(messageBoxText, caption, button, icon);
+            }
+
+            if (restoreResponse)
+            {
+                string messageBoxText = "Backup file sucessfully restored! Restart your browser for the changes to take effect.";
+                string caption = "Restore Success";
+                MessageBoxButton button = MessageBoxButton.OK;
+                MessageBoxImage icon = MessageBoxImage.Exclamation;
+                MessageBox.Show(messageBoxText, caption, button, icon);
+            }
         }
     }
 }
