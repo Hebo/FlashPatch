@@ -6,7 +6,7 @@ namespace FlashPatch
     class Patch
     {
         // Byte patterns
-        private static readonly Byte[] searchPattern = { 0x74, 0x39, 0x83, 0xe8 };
+        private static readonly Byte[] searchPattern = { 0x74, 0x39, 0x83, 0xe8, 0x07, 0x74, 0x11, 0x83 };
         private static readonly Byte[] replacementBytes = { 0x90, 0x90 };
 
         internal static bool apply(string filename)

@@ -67,6 +67,8 @@ namespace FlashPatch
 			{
 				string messageBoxText = "Patch sucessfully applied! Restart your browser for the changes to take effect.";
                 MessageBox.Show(messageBoxText, "Patch Success", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+
+                BtnRestore.IsEnabled = true;
 			}
         }
 
